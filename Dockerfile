@@ -72,14 +72,18 @@ ENV ANDROID_BUILD_TOOLS_VERSION=35.0.0
 ENV PATH=$ANDROID_SDK_ROOT/build-tools/$ANDROID_BUILD_TOOLS_VERSION:$PATH
 ENV ANDROID_EXTRA_PACKAGES=
 ENV ANDROID_REPOSITORIES="extras;android;m2repository extras;google;m2repository"
-ENV ANDROID_CONSTRAINT_PACKAGES="extras;m2repository;com;android;support;constraint;constraint-layout;1.0.2 extras;m2repository;com;android;support;constraint;constraint-layout;1.0.1 extras;m2repository;com;android;support;constraint;constraint-layout;1.0.0"
+# Remove the problematic constraint packages
+ENV ANDROID_CONSTRAINT_PACKAGES=""
 RUN sdkmanager --verbose "platform-tools" "platforms;android-$ANDROID_PLATFORM_VERSION" "build-tools;$ANDROID_BUILD_TOOLS_VERSION" $ANDROID_EXTRA_PACKAGES $ANDROID_REPOSITORIES $ANDROID_CONSTRAINT_PACKAGES
 
 
 
 ##<ndk>##
-ENV ANDROID_NDK_PACKAGES="ndk-bundle cmake;3.10.2.4988404 cmake;3.6.4111459 cmake;3.18.1"
-ENV ANDROID_NDK_ROOT=$ANDROID_HOME/ndk-bundle
+# Install NDK using the new method (ndk-bundle is deprecated)
+ENV ANDROID_NDK_VERSION=27.1.12297006
+# Use current CMake versions that are available
+ENV ANDROID_NDK_PACKAGES="ndk;$ANDROID_NDK_VERSION cmake;3.22.1"
+ENV ANDROID_NDK_ROOT=$ANDROID_HOME/ndk/$ANDROID_NDK_VERSION
 ENV ANDROID_NDK_HOME=$ANDROID_NDK_ROOT
 RUN sdkmanager --verbose $ANDROID_NDK_PACKAGES
 ##</ndk>##
