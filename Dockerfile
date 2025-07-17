@@ -26,18 +26,15 @@ ENV LC_ALL=en_US.UTF-8
 # hadolint ignore=DL3008
 RUN apt-get update \
   && apt-get install -y --no-install-recommends \
-    apt-transport-https \
-    gnupg \
-    lsb-release \
-  # For nodejs we use nodesource, its nice and easy and gets us the correct version
-  # Find latest link https://github.com/nodesource/distributions/blob/master/README.md#installation-instructions
-  && curl -sSL https://deb.nodesource.com/gpgkey/nodesource.gpg.key | apt-key add - \
-  && echo "deb https://deb.nodesource.com/node_18.x $(lsb_release -s -c) main" | tee /etc/apt/sources.list.d/nodesource.list \
-  && echo "deb-src https://deb.nodesource.com/node_18.x $(lsb_release -s -c) main" | tee -a /etc/apt/sources.list.d/nodesource.list \
-  && apt-get update \
-  && apt-get install -y --no-install-recommends \
-    nodejs \
+    curl \
+    xz-utils \
   && rm -rf /var/lib/apt/lists/*
+
+# Install Node.js 18.20.8 directly
+ENV NODE_VERSION=18.20.8
+RUN curl -fsSL https://nodejs.org/dist/v${NODE_VERSION}/node-v${NODE_VERSION}-linux-x64.tar.xz -o node.tar.xz \
+  && tar -xJf node.tar.xz -C /usr/local --strip-components=1 \
+  && rm node.tar.xz
 
 # hadolint ignore=DL3016
 RUN npm -g install xcode-build-tools yarn
