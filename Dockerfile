@@ -67,6 +67,10 @@ RUN curl -L https://raw.githubusercontent.com/tj/n/master/bin/n -o n \
     && npm install -g n \
     && npm install -g yarn
 
+# https://github.com/ekreative/android-docker/blob/main/Dockerfile.template#L43
+# Uses for "upload-apk"
+RUN npm -g install xcode-build-tools
+
 # Full reference at https://dl.google.com/android/repository/repository2-1.xml
 # download and unpack android
 RUN curl -sS https://dl.google.com/android/repository/${SDK_VERSION} -o /tmp/sdk.zip \
